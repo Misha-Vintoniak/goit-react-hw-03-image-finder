@@ -1,0 +1,7 @@
+.ImageGalleryItem {
+  display: flex;
+}
+img {
+  width: 280px;
+  padding: 10px;
+}

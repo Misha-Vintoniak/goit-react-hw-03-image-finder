@@ -1,0 +1,12 @@
+.ImageGallery {
+  display: flex;
+  flex-wrap: wrap;
+  list-style: none;
+  box-sizing: border-box;
+}
+.ImageGalleryItem {
+  width: 100px;
+  height: 100px;
+  list-style: none;
+  text-decoration: none;
+}

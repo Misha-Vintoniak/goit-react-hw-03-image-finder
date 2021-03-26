@@ -1,8 +1,12 @@
 .ImageGallery {
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  max-width: calc(100vw - 48px);
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  grid-gap: 16px;
+  margin: 0 auto 15px;
+
+  padding: 0;
   list-style: none;
-  box-sizing: border-box;
 }
 .ImageGalleryItem {
   width: 100px;

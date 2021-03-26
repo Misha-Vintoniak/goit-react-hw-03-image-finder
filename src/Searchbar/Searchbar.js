@@ -1,32 +1,32 @@
 import { Component } from 'react';
-
+import s from './Searchbar.module.css';
 class Searchbar extends Component {
   state = {
     searchQuery: '',
   };
 
   handleChange = e => {
-    this.setState({ searchQuery: e.target.value });
+    this.setState({ searchQuery: e.currentTarget.value });
   };
 
   handleSubmit = e => {
     e.preventDefault();
     const { searchQuery } = this.state;
     const { onSearch } = this.props;
-    console.log(this.props);
+
     onSearch(searchQuery);
   };
 
   render() {
     return (
-      <header className="Searchbar">
-        <form className="SearchForm" onSubmit={this.handleSubmit}>
-          <button type="submit" className="SearchForm-button">
-            <span className="SearchForm-button-label">Search</span>
+      <header className={s.Searchbar}>
+        <form className={s.SearchForm} onSubmit={this.handleSubmit}>
+          <button type="submit" className={s.SearchFormButton}>
+            <span className={s.SearchFormButtonLabel}>Search</span>
           </button>
 
           <input
-            className="SearchForm-input"
+            className={s.SearchFormInput}
             type="text"
             autocomplete="off"
             autofocus

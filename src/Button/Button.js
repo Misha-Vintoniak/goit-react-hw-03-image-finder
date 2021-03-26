@@ -1,8 +1,13 @@
-function Modal() {
+import s from './Button.module.css';
+export default function Button({ onHandleClick }) {
+  window.scrollTo({
+    top: document.documentElement.scrollHeight,
+    behavior: 'smooth',
+  });
+
   return (
-    <>
-      <div className="modal"></div>
-    </>
+    <button type="button" className={s.Button} onClick={onHandleClick}>
+      Load More...
+    </button>
   );
 }
-export default Modal;

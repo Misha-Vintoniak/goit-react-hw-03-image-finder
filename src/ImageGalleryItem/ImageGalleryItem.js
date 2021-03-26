@@ -1,15 +1,16 @@
 import s from './ImageGalleryItem.module.css';
 
-export default function ImageGalleryItem({ imageSrc, imageUrl }) {
+const ImageGalleryItem = ({ image, toggleModal }) => {
   return (
     <li className={s.ImageGalleryItem}>
       <img
-        src={imageSrc}
-        alt=""
-        data-url={imageUrl}
-        // onClick={handler}
-        className={s.ImageGalleryItem_image}
+        className={s.ImageGalleryItemImage}
+        src={image.webformatURL}
+        alt={image.tags}
+        onClick={toggleModal}
       />
     </li>
   );
-}
+};
+
+export default ImageGalleryItem;

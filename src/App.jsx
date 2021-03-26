@@ -3,6 +3,9 @@ import getImages from './services/pixabayAPI';
 
 import Searchbar from './Searchbar/Searchbar';
 import ImageCallery from './ImageGallery/ImageGallery';
+import Button from './Button/Button';
+import Loader from './Loader/Loader';
+import Modal from './Modal/Modal';
 
 class App extends Component {
   state = {
@@ -11,6 +14,8 @@ class App extends Component {
     isLoading: false,
     images: [],
     error: false,
+    status: 'idle',
+    showModal: false,
   };
 
   componentDidMount() {
@@ -20,13 +25,26 @@ class App extends Component {
   componentDidUpdate(prevProps, prevState) {
     console.log('component Did Update !!!');
 
-    console.log('Попередній пропс ' + prevProps.searchQuery);
     console.log('Попередній стейт ' + prevState.searchQuery);
     console.log(`'State : '` + this.state.searchQuery);
     console.log(prevState.searchQuery === this.state.searchQuery);
 
     if (prevState.searchQuery !== this.state.searchQuery) {
+      this.setState({ status: 'pending' });
       this.fetchImages();
+    }
+    if (
+      this.state.images.length === 0 &&
+      prevState.images.length !== this.state.images
+    ) {
+      new Error(
+        `${this.state.searchQuery} not found, please enter a new search`,
+      );
+    }
+
+    if (prevState.page !== this.state.page) {
+      this.fetchImages();
+      // this.onLoadMore();
     }
   }
 
@@ -34,14 +52,9 @@ class App extends Component {
     this.setState({
       searchQuery: query,
       page: 1,
-      isloading: false,
       images: [],
       error: false,
     });
-  };
-
-  handleFormSubmit = searchQuery => {
-    this.setState(searchQuery);
   };
 
   fetchImages = async () => {
@@ -51,22 +64,47 @@ class App extends Component {
       const data = await getImages({ searchQuery, page });
       this.setState(prevState => ({
         images: [...prevState.images, ...data],
+        status: 'resolved',
       }));
     } catch (error) {
-      console.log({ error });
-      this.setState({ isLoading: false });
+      this.setState({ status: 'rejected' });
+      return Promise.reject(new Error('Something wrong ... refresh search'));
     }
+  };
+  loadMore = () => {
+    this.setState(prevState => ({ page: prevState.page + 1 }));
+
+    // this.fetchImages();
+  };
+  toggleModal = () => {
+    this.setState(showModal => ({ showModal: !showModal }));
   };
 
   render() {
-    const { images } = this.state;
-    return (
-      <>
-        <Searchbar onSearch={this.onSearch} />
-        <ImageCallery images={images} />
-        <p1>моя робота</p1>
-      </>
-    );
+    const { images, status, error, showModal } = this.state;
+    const { largeImageURL } = this.props;
+    <Searchbar onSearch={this.onSearch} />;
+    if (status === 'idle') {
+      return <Searchbar onSearch={this.onSearch} />;
+    }
+    if (status === 'pending') {
+      return <Loader />;
+    }
+    if (status === 'rejected') {
+      <p>{error.message}</p>;
+    }
+    if (status === 'resolved') {
+      return (
+        <>
+          <Searchbar onSearch={this.onSearch} />
+          <ImageCallery images={images} />
+          <Button onHandleClick={this.loadMore} />
+          {showModal && (
+            <Modal onClose={this.toggleModal} src={largeImageURL} />
+          )}
+        </>
+      );
+    }
   }
 }
 export default App;

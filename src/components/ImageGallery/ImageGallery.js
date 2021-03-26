@@ -8,8 +8,8 @@ function ImageGallery({ images, toggleModal }) {
     <ul className={s.ImageGallery}>
       {images.map(image => (
         <ImageGalleryItem
-          className={s.ImageGalleryItem}
           key={image.id}
+          className={s.ImageGalleryItem}
           image={image}
           toggleModal={toggleModal}
         />

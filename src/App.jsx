@@ -1,11 +1,11 @@
 import { Component } from 'react';
 import getImages from './services/pixabayAPI';
 
-import Searchbar from './Searchbar/Searchbar';
-import ImageCallery from './ImageGallery/ImageGallery';
-import Button from './Button/Button';
-import Loader from './Loader/Loader';
-import Modal from './Modal/Modal';
+import Searchbar from './components/Searchbar/Searchbar';
+import ImageCallery from './components/ImageGallery/ImageGallery';
+import Button from './components/Button/Button';
+import Loader from './components/Loader/Loader';
+import Modal from './components/Modal/Modal';
 
 class App extends Component {
   state = {
@@ -73,6 +73,7 @@ class App extends Component {
   };
   loadMore = () => {
     this.setState(prevState => ({ page: prevState.page + 1 }));
+    console.log(this.toggleModal);
 
     // this.fetchImages();
   };
@@ -97,7 +98,7 @@ class App extends Component {
       return (
         <>
           <Searchbar onSearch={this.onSearch} />
-          <ImageCallery images={images} />
+          <ImageCallery images={images} toggleModal={this.toggleModal} />
           <Button onHandleClick={this.loadMore} />
           {showModal && (
             <Modal onClose={this.toggleModal} src={largeImageURL} />

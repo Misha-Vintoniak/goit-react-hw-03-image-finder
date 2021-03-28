@@ -1,9 +1,8 @@
-// import { Component } from 'react';
 import s from './ImageGallery.module.css';
 import ImageGalleryItem from '../ImageGalleryItem/ImageGalleryItem';
-// import PropTypes from 'prop-types';
+import PropTypes from 'prop-types';
 
-function ImageGallery({ images, toggleModal }) {
+function ImageGallery({ images }) {
   return (
     <ul className={s.ImageGallery}>
       {images.map(image => (
@@ -11,11 +10,15 @@ function ImageGallery({ images, toggleModal }) {
           key={image.id}
           className={s.ImageGalleryItem}
           image={image}
-          toggleModal={toggleModal}
         />
       ))}
     </ul>
   );
 }
+
+ImageGallery.propTypes = {
+  key: PropTypes.number.isRequired,
+  image: PropTypes.object.isRequired,
+};
 
 export default ImageGallery;

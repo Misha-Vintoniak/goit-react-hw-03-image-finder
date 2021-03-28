@@ -5,7 +5,6 @@ import Searchbar from './components/Searchbar/Searchbar';
 import ImageCallery from './components/ImageGallery/ImageGallery';
 import Button from './components/Button/Button';
 import Loader from './components/Loader/Loader';
-import Modal from './components/Modal/Modal';
 
 class App extends Component {
   state = {
@@ -18,17 +17,7 @@ class App extends Component {
     showModal: false,
   };
 
-  componentDidMount() {
-    console.log('component Did Mount');
-  }
-
   componentDidUpdate(prevProps, prevState) {
-    console.log('component Did Update !!!');
-
-    console.log('Попередній стейт ' + prevState.searchQuery);
-    console.log(`'State : '` + this.state.searchQuery);
-    console.log(prevState.searchQuery === this.state.searchQuery);
-
     if (prevState.searchQuery !== this.state.searchQuery) {
       this.setState({ status: 'pending' });
       this.fetchImages();
@@ -44,7 +33,6 @@ class App extends Component {
 
     if (prevState.page !== this.state.page) {
       this.fetchImages();
-      // this.onLoadMore();
     }
   }
 
@@ -54,6 +42,7 @@ class App extends Component {
       page: 1,
       images: [],
       error: false,
+      status: 'pending',
     });
   };
 
@@ -74,16 +63,11 @@ class App extends Component {
   loadMore = () => {
     this.setState(prevState => ({ page: prevState.page + 1 }));
     console.log(this.toggleModal);
-
-    // this.fetchImages();
-  };
-  toggleModal = () => {
-    this.setState(showModal => ({ showModal: !showModal }));
   };
 
   render() {
     const { images, status, error, showModal } = this.state;
-    const { largeImageURL } = this.props;
+
     <Searchbar onSearch={this.onSearch} />;
     if (status === 'idle') {
       return <Searchbar onSearch={this.onSearch} />;
@@ -98,11 +82,9 @@ class App extends Component {
       return (
         <>
           <Searchbar onSearch={this.onSearch} />
-          <ImageCallery images={images} toggleModal={this.toggleModal} />
+          <ImageCallery images={images} onClose={showModal} />
+
           <Button onHandleClick={this.loadMore} />
-          {showModal && (
-            <Modal onClose={this.toggleModal} src={largeImageURL} />
-          )}
         </>
       );
     }
